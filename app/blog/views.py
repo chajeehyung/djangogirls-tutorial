@@ -19,7 +19,7 @@ def post_list(request):
 
 
     context = {
-        'posts' : posts,
+        'posts': posts,
 
     }
     return render(
