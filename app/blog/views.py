@@ -1,20 +1,11 @@
-from django.utils import timezone
-
+from django.template import loader
 from django.http import HttpResponse
+
 
 # Create your views here.
 
 def post_list(request):
-    current_time = timezone.now()
-
-    return HttpResponse(
-        '<html>'
-        '<body>'
-        '<h1>Post list</h1>'
-        '<p>{}</p>'
-        '</body>'
-        '</html>'.format(
-            current_time.strftime('%y. %m. %d<br>%H:%M:%S')
-        )
-
-    )
+    templates = loader.get_template('blog/post_list.html')
+    context = {}
+    content = templates.render(context, request)
+    return HttpResponse(content)
