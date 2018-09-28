@@ -10,12 +10,20 @@
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
 </head>
 <body>
-    <h1>Post List</h1>
-    <p>{{ posts }}}</p>
-    <ul>
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark" >
+        <a href="#" class="navbar-brand">DjangoGirls</a>
+    </nav>
+    <div class="container mt-2">
         {% for post in posts %}
-        <li>{{ post.title}}</li>
-        {% endfor %}
-    </ul>
+        <div class="card mb-2">
+            <div class="card-body">
+                <h5 class="card-title">{{ post.title }}</h5>
+                <h5 class="card-subtitle mb-2 text-muted">{{ post.created_date }}</h5>
+                <p class="card-text">{{ post.text|linebreaksbr|truncatechars:200 }}</p>
+                <p class="text-right">Author : {{ post.author}}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 </body>
 </html>
