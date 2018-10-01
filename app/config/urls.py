@@ -20,8 +20,15 @@ from blog import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.post_list),
-    url(r'^posts/(?P<pk>\d+)/$',views.post_detail),
+    url(r'^blog-posts/$',
+        views.post_list,
+        name='post-list'),
+    url(r'^blog-posts/(?P<pk>\d+)/$',
+        views.post_detail,
+        name='post-detail'),
+    url(r'^blog-posts/create/$',
+        views.post_create,
+        name='post-create',)
 
     # /posts/1/
     # /posts/3/

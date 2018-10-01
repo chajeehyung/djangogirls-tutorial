@@ -2,7 +2,7 @@ import random
 import re
 from django.shortcuts import render
 from django.template import loader
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import Post
 
 
@@ -48,5 +48,40 @@ def post_detail(request, pk):
         'blog/post_detail.html',
         context,
     )
+def post_create(request):
+    # Template : blog/post_create.html
+    # URL: /posts/create/
+    # URL NAME : post-create
 
-    # return HttpResponse(post.title)
+    # 1. 템플릿에 하나의 <form>요소 구현
+    #     input[name = 'title']
+    #     textarea[name='title']
+    #     button[type='submit']
+    # 2. post_create.html을 보여주는 링크를 base.html에 구현
+    #     {% url 태그를 사용할 것%}
+    # :pram request
+    # :return
+    if request.method == 'POST':
+        # Post 요청이 왔을경우
+        # 새글을 작성하고 원하는 페이지로 돌아가도록 함
+        # HttpResponse를 돌려줌
+        # 제목: <제목데이터><br>내용: <내 데이터>용
+        # 위 문자열을 가지고 response돌려주기
+        title = request.POST['title']
+        text = request.POST['text']
+
+        # object.create() 메서드를 사용해서
+        # 새 Post 객체를 생성하며 db에 저장 (create() 실행의 반환값은 'post' 변수에 할)
+        # title, text는 request.POST에서 가져온 내용
+        # author는 request.user
+        # 리턴하는 결과는 같은 문자열이지만,
+        # 문자열을 생성할때 만들어진 Post 객체('post변수')의 title속성, text 속성을 사용
+        post = Post.objects.create(
+            author = request.user,
+            title = title,
+            text = text,
+        )
+        next_path = '/blog-posts/'
+        return HttpResponseRedirect(next_path)
+    else:
+        return render(request,'blog/post_create.html')
