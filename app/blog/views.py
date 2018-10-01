@@ -1,8 +1,10 @@
 import random
 import re
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+
 from .models import Post
 
 
@@ -81,7 +83,9 @@ def post_create(request):
             title = title,
             text = text,
         )
-        next_path = '/blog-posts/'
-        return HttpResponseRedirect(next_path)
+        next_path = reverse('post-list')
+        # next_path = '/blog-posts/'
+        # return HttpResponseRedirect(next_path)
+        return  redirect('post-list')
     else:
         return render(request,'blog/post_create.html')
