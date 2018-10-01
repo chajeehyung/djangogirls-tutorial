@@ -20,5 +20,15 @@ from blog import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.post_list)
+    url(r'^$', views.post_list),
+    url(r'^posts/(?P<pk>\d+)/$',views.post_detail),
+
+    # /posts/1/
+    # /posts/3/
+    # /posts/99999/
+    #
+    # <- 이 경우에 해당하는 정규표현식 패턴이(/로 끝나야 한다)
+    #
+    # blog.views.post_detail <- 여기로 전달됟도록 설정 및 뷰 함수 구현
+    # -> 이 뷰는 'Post Detail' 이라는 문자열를 HttpResponse를 사용해 리턴
 ]
