@@ -28,7 +28,10 @@ urlpatterns = [
         name='post-detail'),
     url(r'^posts/create/$',
         views.post_create,
-        name='post-create',)
+        name='post-create',),
+    url(r'^posts/(?P<pk>\d+)/update/$',
+        views.post_update,
+        name='post-update',),
 
     # /posts/1/
     # /posts/3/

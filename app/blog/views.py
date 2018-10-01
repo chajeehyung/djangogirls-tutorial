@@ -7,7 +7,6 @@ from django.urls import reverse
 
 from .models import Post
 
-
 # Create your views here.
 
 def post_list(request):
@@ -18,7 +17,6 @@ def post_list(request):
     # content = templates.render(context, request)
     # return HttpResponse(content)
     posts = Post.objects.order_by('-created_date')
-
 
     context = {
         'posts': posts,
@@ -89,3 +87,40 @@ def post_create(request):
         return  redirect('post-list')
     else:
         return render(request,'blog/post_create.html')
+
+def post_update(request, pk):
+        # URL
+        # /posts/<pk>/edit/
+
+        # Template
+        # blog/post_edit.html
+
+        # 템플릿은 post_create.html의 내용과 같으니
+        # input[name=title]과 textarea[name=text]의 내용을
+        # 매개변수의 'pk'에 해당하는 post의 title, text속성으로 미리 채운상태로 form을 실행
+        # -> context dict에 'post' 키에 해당하는 Post Instance 담아서 보내 사용
+
+        # post_detatil view에서
+        # 특정 pk의 Post를 가져와서 템플릿으로 전달
+        # 템플릿에서 전달받은 특정 Post를 사용
+
+        # post_create view에서
+        # form 형태 보기
+        # textarea속성의 기본값은 열림/닫힘 태그 사이의 텍스트
+        post = Post.objects.get(id=pk)
+        if request.method == 'POST':
+            title = request.POST['title']
+            text = request.POST['text']
+
+            post.title = title
+            post.text = text
+
+            post.save()
+
+            return redirect('post-detail', pk=pk)
+
+        else:
+            context = {
+                'post': post
+            }
+            return render(request,'blog/post_update.html',context)
