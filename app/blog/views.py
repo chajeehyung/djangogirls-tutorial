@@ -1,5 +1,7 @@
 import random
 import re
+
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
@@ -16,7 +18,30 @@ def post_list(request):
     # }
     # content = templates.render(context, request)
     # return HttpResponse(content)
-    posts = Post.objects.order_by('-created_date')
+
+    # 1.request.GET에 'page'값이 전달
+    # 2.전체 Post QuerySet을 사용해서 Paginator인스턴스를 생성, paginator변수에 할당
+    # 3.paginator 인스턴스의 '.page()'메서드를 호출 인수에 GET요청에 전달된 'page'값을 사용
+    # 4..page()메서드 호출 결과를 posts 변수에 할당(Page Instance)
+    # 5.posts 변수르 템플릿으로 저장
+    # 6.Page Instances는 QuerySet과 같이 순회가능한 객체이며 순회시 각 루푸마다 해당 Post Instatnce를 돌려줌
+    # post_list.html에서 해당 객체를 순회하도록 템플릿을 구현
+    # 7.템플릿에 '이전', '<현재 페이지 이전>'. '다음 링크를 생성성'
+    paginator = Paginator(
+        Post.objects.order_by('-created_date'),
+        5,
+    )
+
+    # posts = Post.objects.order_by('-created_date')
+    page = request.GET.get('page')
+
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+
 
     context = {
         'posts': posts,
